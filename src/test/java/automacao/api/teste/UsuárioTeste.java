@@ -4,26 +4,16 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.apache.http.HttpStatus;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import automacao.api.dominio.Usuario;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 
-public class PrimeiroTeste {
+public class UsuárioTeste extends BaseTeste{
+
+	/* final quer dizer que uma vez que ela for definida não terá como mudá-la programaticamente */
+	private static final String LISTA_USUARIOS_ENDPOINTS = "/users";
+	private static final String CRIAR_USUARIO_ENDPOINTS = "/user";
 	
-	@BeforeClass
-	public static void setUp() {
-		/* Caso o teste falhe o Rest Assured irá habilitar o Log de resposta de requisições*/
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-		
-		/* Como a URI será a mesma para todos, aqui o Rest Assured permite que salvemos.
-		 * Assim também o path, que é o /api */
-		baseURI = "https://reqres.in";
-		basePath = "/api";
-	}
-
 	@Test
 	public void testeListaMetadadosUsuario() {
 		given()
@@ -32,7 +22,7 @@ public class PrimeiroTeste {
 		
 		/* A Ação */
 		.when()
-			.get("/users")
+			.get(LISTA_USUARIOS_ENDPOINTS)
 		.then()
 		.statusCode(200)
 		.statusCode(HttpStatus.SC_OK)
@@ -46,19 +36,19 @@ public class PrimeiroTeste {
 	@Test
 	public void testeCriarUsuarioComSucesso() {
 		/* Preparando a ação */
-		Usuario usuario = new Usuario("Johnson", "motorista");
+		Usuario usuario = new Usuario("Johnson", "motorista", null, null);
 		given()
 		
+		/* Como o contentType é um JSON ele tenta mapear a classe Usuario em um JSON e fazer
+		 * a serialização */
+	//	.contentType(ContentType.JSON)
 		/* Para refatorar o 'set' foi criada uma classe Usuario com os parâmetros
 		 * e foi intanciada nesse método para que serializasse o objeto */
 		.body(usuario)
 //		.body("{\"name\": \"Johnson\", \"job\": \"motorista\"}")
-		.contentType(ContentType.JSON)
-//			.params("name", "Johnson")
-//			.params("job", "motorista")
-		
+
 		.when()
-			.post("/users")
+			.post(CRIAR_USUARIO_ENDPOINTS)
 		.then()
 			.statusCode(HttpStatus.SC_CREATED)
 			.body("name", is("Johnson"))
@@ -70,7 +60,7 @@ public class PrimeiroTeste {
 	@Test
 	public void testeMetadadosUsuarioUnico() {
 		when()
-		.get("/users/2")
+		.get(LISTA_USUARIOS_ENDPOINTS + "/2")
 	.then()
 	.statusCode(HttpStatus.SC_OK)
 	.body("data.id", is(2))

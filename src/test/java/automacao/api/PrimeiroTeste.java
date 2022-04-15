@@ -1,4 +1,4 @@
-package automacao;
+package automacao.api;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -16,13 +16,22 @@ public class PrimeiroTeste {
 	public static void setUp() {
 		/* Caso o teste falhe o Rest Assured irá habilitar o Log de resposta de requisições*/
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		
+		/* Como a URI será a mesma para todos, aqui o Rest Assured permite que salvemos.
+		 * Assim também o path, que é o /api */
+		baseURI = "https://reqres.in";
+		basePath = "/api";
 	}
 
 	@Test
 	public void testeListaMetadadosUsuario() {
+		given()
+		/* Aqui estou setando o parâmetro Page, que possibilita */
+			.params("page", "2")
+		
 		/* A Ação */
-		when()
-			.get("https://reqres.in/api/users?page=2")
+		.when()
+			.get("/users")
 		.then()
 		.statusCode(200)
 		.statusCode(HttpStatus.SC_OK)
@@ -43,7 +52,7 @@ public class PrimeiroTeste {
 //			.params("job", "motorista")
 		
 		.when()
-			.post("https://reqres.in/api/users")
+			.post("/users")
 		.then()
 			.statusCode(HttpStatus.SC_CREATED)
 			.body("name", is("Johnson"))
@@ -55,7 +64,7 @@ public class PrimeiroTeste {
 	@Test
 	public void testeMetadadosUsuarioUnico() {
 		when()
-		.get("https://reqres.in/api/users/2")
+		.get("/users/2")
 	.then()
 	.statusCode(HttpStatus.SC_OK)
 	.body("data.id", is(2))

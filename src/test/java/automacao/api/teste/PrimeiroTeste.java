@@ -1,4 +1,4 @@
-package automacao.api;
+package automacao.api.teste;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -7,6 +7,7 @@ import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import automacao.api.dominio.Usuario;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
@@ -45,8 +46,13 @@ public class PrimeiroTeste {
 	@Test
 	public void testeCriarUsuarioComSucesso() {
 		/* Preparando a ação */
+		Usuario usuario = new Usuario("Johnson", "motorista");
 		given()
-		.body("{\"name\": \"Johnson\", \"job\": \"motorista\"}")
+		
+		/* Para refatorar o 'set' foi criada uma classe Usuario com os parâmetros
+		 * e foi intanciada nesse método para que serializasse o objeto */
+		.body(usuario)
+//		.body("{\"name\": \"Johnson\", \"job\": \"motorista\"}")
 		.contentType(ContentType.JSON)
 //			.params("name", "Johnson")
 //			.params("job", "motorista")

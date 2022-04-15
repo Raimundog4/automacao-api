@@ -52,4 +52,15 @@ public class PrimeiroTeste {
 			.body("job", is("motorista"));
 	}
 	
+	@Test
+	public void testeMetadadosUsuarioUnico() {
+		when()
+		.get("https://reqres.in/api/users/2")
+	.then()
+	.statusCode(HttpStatus.SC_OK)
+	.body("data.id", is(2))
+	.body("data.email", is("janet.weaver@reqres.in"))
+	.body("data.first_name", is("Janet"));
+	}
+	
 }

@@ -2,17 +2,19 @@ package automacao.api.teste;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import automacao.api.dominio.Usuario;
 
-public class UsuarioTeste extends BaseTeste{
+public class TesteUsuario extends TesteBase{
 
 	/* final quer dizer que uma vez que ela for definida não terá como mudá-la programaticamente */
 	private static final String LISTA_USUARIOS_ENDPOINTS = "/users";
 	private static final String CRIAR_USUARIO_ENDPOINTS = "/user";
+	private static final String MOSTRAR_USUARIO_ENDPOINTS = "/users/{userId}";
 	
 	@Test
 	public void testeListaMetadadosUsuario() {
@@ -66,6 +68,25 @@ public class UsuarioTeste extends BaseTeste{
 	.body("data.id", is(2))
 	.body("data.email", is("janet.weaver@reqres.in"))
 	.body("data.first_name", is("Janet"));
+	}
+	
+	@Test
+	public void testeMetadadosUsuarioUnicoDeserializacao() {
+		Usuario usuario = given().
+			pathParam("userId", "2").//Define uma variável de ambiente
+		when().
+//			get("/users/{userId}").//Usando a variável de ambiente
+			get(MOSTRAR_USUARIO_ENDPOINTS).
+		then().
+			statusCode(HttpStatus.SC_OK).
+			/* Estou dizendo para extrair o body usando um jsonPath.
+			 * E você vai pegar um objeto, onde o path dele é data, e o
+			 * objeto é Usuario.class */
+		extract().//Ele não reconhece o campo ID - ler no Usario.java
+			body().jsonPath().getObject("data", Usuario.class);
+			assertThat(usuario.getEmail(), containsString("@reqres.in"));
+			assertThat(usuario.getName(), is("Janet"));
+			assertThat(usuario.getLastName(), is("Weaver"));
 	}
 	
 	@Test

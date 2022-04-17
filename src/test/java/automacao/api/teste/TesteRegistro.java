@@ -12,7 +12,7 @@ import io.restassured.RestAssured;
 import io.restassured.builder.ResponseSpecBuilder;
 
 //Se a API rejeitar açguma propriedade por ser para ea desconhecida, o jackson permite ignorar
-public class RegistroTeste extends BaseTeste{
+public class TesteRegistro extends TesteBase{
 
 	/* Criando esse reponseEspecification para checar o statusCode de todos
 	 * os testes, pois são esperados o mesmo status de todos eles.
@@ -42,6 +42,8 @@ public class RegistroTeste extends BaseTeste{
 			.body("error", is("Missing password"));
 	}
 	
+	/* Esse teste deveria estar em TesteLogin, mas está aqui só para mostrar a 
+	 * funcionalidade de múltiplos setUps e do responseSpec */
 	@Test
 	public void testeNaoEfetuarLoginComSenhaFaltando() {
 		Usuario usuario = new Usuario();

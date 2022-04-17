@@ -11,7 +11,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 
-public class BaseTeste {
+public class TesteBase {
 
 	@BeforeClass
 	public static void setUp() {

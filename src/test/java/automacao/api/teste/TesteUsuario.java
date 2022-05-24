@@ -119,7 +119,11 @@ public class TesteUsuario extends TesteBase{
 		 * Após a solicitação nós informamos no extract que queremos extrair o body,
 		 * quero extrair um path e o declaramos. Ele retorna e coloca na variável. */
 		int perPageEsperado = given().
-				params("page", pagina).
+				params("page", pagina).//Há duas possibilidades de usar o param
+				//Uma é só o param (adicionar somente um)
+				//Outra é usar params (mais de um)
+				//Ainda tem o .and
+				//param().and.param()
 			when().
 				get(LISTA_USUARIOS_ENDPOINTS).
 			then().

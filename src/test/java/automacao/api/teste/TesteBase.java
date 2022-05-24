@@ -3,7 +3,6 @@ package automacao.api.teste;
 import static io.restassured.RestAssured.basePath;
 import static io.restassured.RestAssured.baseURI;
 
-import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 
 import io.restassured.RestAssured;
